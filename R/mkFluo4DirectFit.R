@@ -1,4 +1,4 @@
-`mkFluo4DirectFit` <-
+mkFluo4DirectFit <-
 function(Ca,
                              phi,
                              S_B_340,
@@ -28,7 +28,7 @@ function(Ca,
   ##  - SQRT: a logical value (TRUE or FALSE, or 1 or 0) indicating whether
   ##          the square root of the fluorescence signal is considered (or the signal itself).
   ##          Setting SQRT to TRUE results in a stabilized variance, independent on the signal value.
-
+  
   if(is.list(R_min)) R_min <- R_min$value
   if(is.list(R_max)) R_max <- R_max$value
   if(is.list(K_eff)) K_eff <- K_eff$value

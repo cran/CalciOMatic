@@ -1,4 +1,4 @@
-`igDirect` <-
+igDirect <-
 function(adu_B_340,
                      adu_340,
                      adu_B_380,
@@ -58,13 +58,16 @@ function(adu_B_340,
     t <- t[subset]
     adu_340 <- adu_340[subset]
     adu_380 <- adu_380[subset]
-
+    
     ## Define the data and formula for the linear fit
     Y <- c(adu_340/T_340/P - S_B_340, adu_380/T_380/P - S_B_380)
-
+    
     Ca_pred <- caMonoBiExpFromIG(t=t, tOn=tOn, ig=ig_ratio)
-    X <- c(B_T / (K_d+Ca_pred) * c(R_min*K_eff+R_max*Ca_pred,K_eff+Ca_pred))
 
+    if(length(B_T) > length(Ca_pred)) B_T <- B_T[subset]
+
+    X <- c(B_T / (K_d+Ca_pred) * c(R_min*K_eff+R_max*Ca_pred,K_eff+Ca_pred))
+    
   } else if(is.matrix(t)) {
     ## Consider a subset of the fluorescence counts at each wavelength
     t_2 <- matrix(NA,nrow=dim(t)[1],ncol=length(subset))
@@ -95,7 +98,7 @@ function(adu_B_340,
   ## Perform a linear fit with a 0 intercept (with -1, or 0+) to determine phi  
   myfit <- lm(Y ~ X - 1)
   phi <- as.numeric(coef(myfit)[1])
-    
+  
   result <- c(ig_ratio,
               log_phi=log(phi),
               log_S_B_340=log(S_B_340),

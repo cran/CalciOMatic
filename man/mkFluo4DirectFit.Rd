@@ -3,7 +3,7 @@
 \title{Define Predicted Fluorescence Signals}
 \description{
   The function \code{mkFluo4DirectFit} defines a single signal made of
-  four fluorescence signals (the background ant fluorescence transients
+  four fluorescence signals (the background and fluorescence transients
   at both wavelengths), for use with within the
   \code{mkFunction4DirectFit} function
 }
@@ -23,10 +23,10 @@ mkFluo4DirectFit(Ca, phi, S_B_340, S_B_380, nb_B,
   \item{R_max}{the maximum fluorescence ratio between the measurements
     at 340 and 380 nm. This parameter is obtained from calibration experiments}
   \item{K_eff}{the effective dissociation constant of the dye in the cell (in
-    muM). This parameter is obtained from calibration experiments}
+    \eqn{\mu}{mu}M). This parameter is obtained from calibration experiments}
   \item{K_d}{the dissociation constant of the dye in the cell (in
-    muM). This parameter is obtained from calibration experiments}
-  \item{B_T}{the total concentration of the dye inside the cell (in muM)}
+    \eqn{\mu}{mu}M). This parameter is obtained from calibration experiments}
+  \item{B_T}{the total concentration of the dye inside the cell (in \eqn{\mu}{mu}M)}
   \item{T_340}{the exposure time at 340 nm}
   \item{T_380}{the exposure time at 380 nm}
   \item{P}{the number of pixels of the ROI}

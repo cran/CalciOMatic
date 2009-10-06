@@ -40,15 +40,18 @@ mkFunction4DirectFit(type = "mono", nb_B = 5, transients = 1,
   \item{T_380}{the exposure time at 380 nm}
   \item{P}{the number of pixels of the ROI}
   \item{P_B}{the number of pixels of the background region}
-  \item{log_Ca0_1}{the logarithm of the \eqn{[Ca^{2+}]}{Ca^2+} baseline}
-  \item{log_dCa_1}{the logarithm of the \eqn{[Ca^{2+}]}{Ca^2+} jump}
-  \item{log_tau_1}{the logarithm of the \eqn{[Ca^{2+}]}{Ca^2+} time constant}
+  \item{log_Ca0_1}{the logarithm of the \eqn{[Ca^{2+}]}{Ca^2+} baseline
+    of the first transient}
+  \item{log_dCa_1}{the logarithm of the \eqn{[Ca^{2+}]}{Ca^2+} jump of
+    the first transient}
+  \item{log_tau_1}{the logarithm of the \eqn{[Ca^{2+}]}{Ca^2+} time
+    constant of the first transient}
   \item{mu_1}{the real number (between -\code{Inf} and +\code{Inf})
     defining the relative weight of the fast and slow time constants of
     the \eqn{[Ca^{2+}]}{Ca^2+} biexponential decay (if \code{type} is set to
     \code{"bi"}). The weight of the fast time constant is given by
     \eqn{\frac{exp(\mu)}{1+exp(\mu)}}{exp(mu)/(1+exp(mu))}}
-  \item{log_dtau}{the logarithm of the d\eqn{\tau}{tau} defining
+  \item{log_dtau_1}{the logarithm of the d\eqn{\tau}{tau} defining
     the slow time constant of the \eqn{[Ca^{2+}]}{Ca^2+} biexponential
     decay (if \code{type} is set to \code{TRUE"bi"}). This slow time
     constant is given by \eqn{\tau_s=\tau+d\tau}{tau_s=tau+dtau}}
@@ -63,8 +66,8 @@ mkFunction4DirectFit(type = "mono", nb_B = 5, transients = 1,
   \item{log_R_max}{the logarithm of the maximum ratiometric measurement
     observable}
   \item{log_K_eff}{the logarithm of the effective Fura dissociation
-    constant in the cell (in muM)}
-  \item{log_K_d}{the logarithm of the Fura dissociation constant (in muM)}
+    constant in the cell (in \eqn{\mu}{mu}M)}
+  \item{log_K_d}{the logarithm of the Fura dissociation constant (in \eqn{\mu}{mu}M)}
   \item{alpha}{the isocoefficient. Present only if \code{alphamethod} is
     set to \code{TRUE}. In this case, \code{B_T} is replaced with
     \eqn{adu_{340}/(T_{340} \cdot P) - adu_{B,340}/(T_{340} \cdot P_B) +
@@ -84,7 +87,7 @@ Time <- seq(0,12,length.out=160)
 Ca0  <- 0.10
 dCa  <- 0.25
 tau  <- 1.5
-mu <- 0
+mu   <- 0
 dtau <- 10
 
 ## Calibrated parameters

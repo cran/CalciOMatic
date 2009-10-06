@@ -10,11 +10,11 @@
   \code{phi}, \code{S_B}, \code{T_stim}, \code{P} and \code{P_B})
 }
 \usage{
-fluo(Ca = 1, R_min = 0.136, R_max = 2.701, K_eff = 3.637, K_d = 0.58,
+fluo(Ca = 1, R_min = 0.136, R_max = 2.701, K_eff = 3.637, K_d = 0.583,
      B_T = 100, phi = 1.25, S_B = 10, T_stim = 0.015, P = 400, P_B = 400)
 }
 \arguments{
-  \item{Ca}{the intracellular calcium concentration (in muM)}
+  \item{Ca}{the intracellular calcium concentration (in \eqn{\mu}{mu}M)}
   \item{R_min}{the minimum fluorescence ratio between the measurements
     at 340 and 380 nm. This parameter is obtained from calibration
     experiments}
@@ -22,21 +22,21 @@ fluo(Ca = 1, R_min = 0.136, R_max = 2.701, K_eff = 3.637, K_d = 0.58,
     at 340 and 380 nm. This parameter is obtained from calibration
     experiments}
   \item{K_eff}{the effective dissociation constant of the dye in the cell (in
-    muM). This parameter is obtained from calibration experiments}
+    \eqn{\mu}{mu}M). This parameter is obtained from calibration experiments}
   \item{K_d}{the dissociation constant of the dye in the cell (in
-    muM). This parameter is obtained from calibration experiments}
-  \item{B_T}{the total dye concentration in the cell (in muM)}
+    \eqn{\mu}{mu}M). This parameter is obtained from calibration experiments}
+  \item{B_T}{the total dye concentration in the cell (in \eqn{\mu}{mu}M)}
   \item{phi}{a dimensionless scaling experiment-specific parameter}
   \item{S_B}{the background (+ dark current) fluorescence intensity (in
     count/pixel/sec)}
   \item{T_stim}{the exposure time (in s)}
-  \item{P}{the number of pixels od the Region Of Interest (ROI)}
-  \item{P_B}{the number of pixels od the Background Region}
+  \item{P}{the number of pixels of the Region Of Interest (ROI)}
+  \item{P_B}{the number of pixels of the Background Region}
 }
 \details{
   The calcium imaging technique makes use of the ability of a
   fluorescent dye (e.g. Fura) to bind with calcium ions presents inside
-  a neural cell. Briefly, photons emitted by a neural tissue are
+  a neural cell. Briefly, the photons emitted by a neural tissue are
   recorded by a CCD camera, following the illumination of the tissue at
   a relevant wavelength (corresponding to the excitation properties of
   the free and/or bound dye). The amount of photons emitted depends on
@@ -44,14 +44,14 @@ fluo(Ca = 1, R_min = 0.136, R_max = 2.701, K_eff = 3.637, K_d = 0.58,
   and, in the case of a ratiometric dye, a algebraic relationship links
   both variables. The latter is given by:
 \deqn{%
-F_{340} = \left(\frac{B_T \cdot \phi}{K_d+Ca} \cdot \left(R_{min} \cdot K_{eff}+R_{max} \cdot Ca\right)+S_{B,340}\right) \cdot T_{stim,340} \cdot P
+F_{340} = \left(\frac{B_T \cdot \phi}{K_d+[Ca^{2+}]} \cdot \left(R_{min} \cdot K_{eff}+R_{max} \cdot [Ca^{2+}]\right)+S_{B,340}\right) \cdot T_{stim,340} \cdot P
 }{%
-F_340 = (B_T*phi/(K_d+Ca) * (R_min*K_eff+R_max*Ca) + S_B,340) * T_stim,340 * P
+F_340 = (B_T*phi/(K_d+[Ca^{2+}]) * (R_min*K_eff+R_max*[Ca^{2+}]) + S_B,340) * T_stim,340 * P
 }
 \deqn{%
-F_{380} = \left(\frac{B_T \cdot \phi}{K_d+Ca} \cdot \left(K_{eff}+Ca\right)+S_{B,380}\right) \cdot T_{stim,380} \cdot P
+F_{380} = \left(\frac{B_T \cdot \phi}{K_d+[Ca^2+]} \cdot \left(K_{eff}+[Ca^2+]\right)+S_{B,380}\right) \cdot T_{stim,380} \cdot P
 }{%
-F_380 = (B_T*phi/(K_d+Ca) * (K_eff+Ca) + S_B,380) * T_stim,380 * P
+F_380 = (B_T*phi/(K_d+[Ca^2+]) * (K_eff+[Ca^2+]) + S_B,380) * T_stim,380 * P
 }
 The function \code{fluo} determines photon counts according to one of
 these two equations, depending on the values of \code{R_min},
@@ -59,7 +59,7 @@ these two equations, depending on the values of \code{R_min},
 }
 \value{
   An object of class \code{"fluo_transient"}, which is a vector
-  containing the Fluorescence values calculated as described above. The
+  containing the fluorescence values calculated as described above. The
   object has several attributes, which are:
   \item{Ca}{a copy of argument \code{Ca}}
   \item{R_min}{a copy of argument \code{R_min}}
@@ -72,7 +72,10 @@ these two equations, depending on the values of \code{R_min},
   \item{S_B}{a copy of argument \code{S_B}}
   \item{phi}{a copy of argument \code{phi}}
 }
-\references{Here, we could refer to the manuscript in preparation}
+\references{Joucla S, Pippow A, Kloppenburg P and Pouzat C (2009)
+  Quantitative estimation of calcium dynamics from ratiometric
+  measurements: a direct, non-ratioing, method, Journal of
+  Neurophysiology, in revision}
 \author{Sebastien Joucla \email{sebastien.joucla@parisdescartes.fr}}
 \seealso{\code{\link{caBiExp}},
   \code{\link{caMonoExp}}

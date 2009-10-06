@@ -3,30 +3,30 @@
 \title{BiExponential Time Course of Intracellular Calcium Concentration}
 \description{
   The function \code{caBiExp} returns a vector of intracellular
-  calcium concentration (Ca) vs time values \code{t}. A \code{dCa} jump
+  calcium concentration (\eqn{[Ca^{2+}]}{[Ca^2+]}) vs time values \code{t}. A \code{dCa} jump
   occurs at \code{tOn}, followed by a biexponential return to baseline
   value \code{Ca0}. The fast time constant (\code{tau}) has a weight
   \code{fact} (between 0 and 1), the slow time constant
-  (\code{tau}+\code{dtau}) has a weight 1-\code{fact}.
+  (\code{tau}+\code{dtau}) has a weight \code{1-fact}.
 }
 \usage{
 caBiExp(t = 1, tOn = 1, Ca0 = 0.05, dCa = 0.1, tau = 3, fact = 1, dtau = 2)
 }
 \arguments{
-  \item{t}{a vector of time values at which Ca is computed (in s)}
-  \item{tOn}{the time of the Ca jump (in s)}
-  \item{Ca0}{the baseline Ca (in muM)}
-  \item{dCa}{the Ca jump occuring at \code{tOn} (in muM)}
-  \item{tau}{the fast time constant of the Ca biexponential return to
+  \item{t}{a vector of time values at which \eqn{[Ca^{2+}]}{[Ca^2+]} is computed (in s)}
+  \item{tOn}{the time of the \eqn{[Ca^{2+}]}{[Ca^2+]} jump (in s)}
+  \item{Ca0}{the baseline \eqn{[Ca^{2+}]}{[Ca^2+]} (in \eqn{\mu}{mu}M)}
+  \item{dCa}{the \eqn{[Ca^{2+}]}{[Ca^2+]} jump occuring at \code{tOn} (in \eqn{\mu}{mu}M)}
+  \item{tau}{the fast time constant of the \eqn{[Ca^{2+}]}{[Ca^2+]} biexponential return to
     baseline (in s)}
   \item{fact}{the relative weight of the fast time constant of the
     biexponential decay (a real number between 0 and 1). The relative
-    weight of the slow time constant is given by 1-\code{fact}}
+    weight of the slow time constant is given by \code{1-fact}}
   \item{dtau}{added to \code{tau}, defines the slow time constant of the
-    Ca biexponential return to baseline (in s)}
+    \eqn{[Ca^{2+}]}{[Ca^2+]} biexponential return to baseline (in s)}
 }
 \value{
-  A vector containing the Ca values. The vector has the two following
+  A vector containing the \eqn{[Ca^{2+}]}{[Ca^2+]} values. The vector has the two following
   attributes:
   \item{Time}{a copy of argument \code{t}}
   \item{tOn}{a copy of argument \code{tOn}}
@@ -44,7 +44,7 @@ caBiExp(t = 1, tOn = 1, Ca0 = 0.05, dCa = 0.1, tau = 3, fact = 1, dtau = 2)
                 dtau = 8)
 
   ## Plot the calcium transient vs. time
-  plot(attr(Ca,"Time"),Ca,type="l")
+  plot(attr(Ca,"Time"), Ca, type="l")
 
   ## Add a vertical dashed line at tOn
   abline(v = attr(Ca,"tOn"), lty = 2)

@@ -4,30 +4,34 @@
   the Ratiometric Transformation}
 \description{
   The function \code{caFromDf} applies the ratiometric transformation to
-  vectors of fluorescence (including background fluorescence) contained
-  in a data frame and returns the corresponding intracellular calcium
-  concentration. The structure of the data frame is defined as in the
-  \code{ratioExpsimul} function.
+  the vectors of fluorescence (including background fluorescence)
+  contained in a data frame and returns the corresponding intracellular
+  calcium concentration. The structure of the data frame is defined in
+  the \code{\link{ratioExpSimul}} function.
 }
 \usage{caFromDf(df, numTransient = 1, Plot = FALSE)}
 \arguments{
   \item{df}{a data frame of class \code{"fluo_rawdata"} containing all
     relevant information (fluorescence transients, background
     fluorescence, calibration parameters and exposure times). The
-    structure of the input data frame must be defined as in the
-    \code{ratioExpsimul} function.}
+    structure of the input data frame is defined in the
+    \code{\link{ratioExpSimul}}}
   \item{numTransient}{an integer: The index of the transient to analyse
-    in the input data frame \code{df}.}
-  \item{Plot}{a logical value: Set to TRUE to plot the calcium transient
-    deduced from the ratiometric transformation.}
+    in the input data frame \code{df}}
+  \item{Plot}{a logical value: Set to \code{TRUE} to plot the calcium
+    transient deduced from the ratiometric transformation}
 }
-\details{see the help of the \code{\link{caFromRatio}} function.}
+\details{
+  The way \eqn{[Ca^{2+}]}{[Ca^2+]} is estimated by the ratiometric
+  transformation is described in the help of the
+  \code{\link{caFromRatio}} function.}
 \value{
-  A vector of intracellular calcium concentrations calculated with the
+  A vector of intracellular calcium concentration
   ratiometric transformation.
 }
 \author{Sebastien Joucla \email{sebastien.joucla@parisdescartes.fr}}
-\seealso{\code{\link{ratioExpSimul}}, \code{\link{caFromRatio}}}
+\seealso{\code{\link{ratioExpSimul}}, \code{\link{ratioExpPhysio}},
+  \code{\link{caFromRatio}}}
 \examples{
 ## (0) 'Experimental' parameters
 
@@ -39,10 +43,10 @@ dCa <- 0.25
 tau <- 1.5
 
 ## Calibration parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = TRUE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = TRUE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = TRUE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = TRUE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=TRUE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=TRUE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=TRUE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=TRUE)
 
 ## Experiment-specific parameters
 nb_B    <- 5

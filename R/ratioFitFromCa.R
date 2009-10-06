@@ -1,14 +1,11 @@
-`ratioFitFromCa` <-
-function(Ca,
+ratioFitFromCa <- function(Ca,
                            t,
                            tOn,
                            type="mono",
                            ig=NULL,
                            Plot=FALSE,
                            Fit=TRUE,
-                           AfterPeak=FALSE,
-                           Trace=FALSE,
-                           WarnOnly=TRUE
+                           AfterPeak=FALSE
                            ) {
   ## Function ratioFitFromCa
   ## 
@@ -16,6 +13,8 @@ function(Ca,
   ## with the classical ratiometric method. The resulting calcium
   ## signal is fitted with a mono- or bi- exponential decay,
   ## depending on the value of 'type'.
+  ## 
+  ## The fit uses the covariance matrix of the calcium transients
   ## 
   ## Ca: a vector of [Ca] vs. time
   ## t: a vector time values at which the calcium was recorded
@@ -40,7 +39,7 @@ function(Ca,
   ##   - FitFunction: the function used in the nls formula
   
   ## Plot "experimental" data
-  if(Plot==TRUE) plot(t,Ca,'l')
+  if(Plot==TRUE) {X11(); plot(t,Ca,'l')}
   
   ## Define a "mysubset" attribute to the time vector
   attr(t,"mysubset") <- NULL
@@ -72,43 +71,83 @@ function(Ca,
     lines(t[-mysubset], Initial_Transient[-mysubset], col='blue', type="p", pch=20)
     lines(t[mysubset], Initial_Transient[mysubset], col='blue')
   }
-  
+
   if(Fit==TRUE) {
     ## Define the fit formula, which depends on the decay type ("mono", or "bi")
-    ratio_fit_fct <- mkFunction4RatioFit(type=type)
+    ## ratio_fit_fct <- mkFunction4RatioFit_v2(type=type)
     
     ## Define the string to evaluate to perform the fit
-    arg_list <- formals(ratio_fit_fct)
-    arg_names <- names(arg_list)
-    arg_2_keep <- 1:(5+2*(type=="bi"))
-    L = length(arg_2_keep)
+    ## arg_list <- formals(ratio_fit_fct)
+    ## arg_names <- names(arg_list)
+    ## arg_2_keep <- 1:(6+2*(type=="bi"))
+    ## L <- length(arg_2_keep)
     
-    ## Define the weights to apply to each component
-    myweights <- 1/attr(Ca,"var")
+    ## Define the superior triangular matrix
+    ## to use for the least-squares regression
+    cov <- attr(Ca,"cov")
+    cov <- cov[mysubset,mysubset]
+    vocChol <- t(solve(chol(cov)))
+    ## A <- chol(cov)
+    ## B <- t(solve(A))
     
-    ## Fit taking into account the whole signal, and assigning subset the right vector
-    String_4_Fit <- "calcium_ratio_fit <- nls(Ca ~ ratio_fit_fct("
-    for(i in 1:(L-1)) String_4_Fit <- c(String_4_Fit,arg_names[arg_2_keep[i]],",")
-    String_4_Fit <- c(String_4_Fit,arg_names[arg_2_keep[L]],"), start=ig, subset=mysubset, weights=myweights,")
-    String_4_Fit <- c(String_4_Fit,"trace=Trace, control=list(warnOnly=WarnOnly))")
+    ## Put the variables of ig in the environment of the current function
+    for(i in 1:length(ig)) assign(names(ig)[i],ig[[i]])
+
+    ratio_fit_fct <- mkFunction4RatioFit(type=type)
     
-    ## Perform the fit
-    eval(parse(text=String_4_Fit))
+    rssFct <- function(p) {
+      if(type == "mono") {
+        res <- sum((vocChol %*% (Ca[mysubset] - ratio_fit_fct(t[mysubset],
+                                                              tOn,
+                                                              p[1],
+                                                              p[2],
+                                                              p[3])
+                                 )
+                    )^2
+                   )
+      } else if(type == "bi") {
+        res <- sum((vocChol %*% (Ca[mysubset] - ratio_fit_fct(t[mysubset],
+                                                              tOn,
+                                                              p[1],
+                                                              p[2],
+                                                              p[3],
+                                                              p[4],
+                                                              p[5])
+                                 )
+                    )^2
+                   )
+      }
+      return(res)
+    }
+    
+    keepGoing <- TRUE
+    startValue <- as.vector(unlist(ig))
+    nbFits <- 1
+    
+    while(keepGoing == TRUE && nbFits <= 10) {
+      calcium_ratio_fit <- optim(startValue, rssFct, method="BFGS", hessian=TRUE)
+      keepGoing <- calcium_ratio_fit$convergence > 0
+      startValue <- calcium_ratio_fit$par
+      nbFits <- nbFits+1
+    }
     
     ## Plot the predicted data over the experimental data
     if(Plot==TRUE) lines(t[mysubset], predict(calcium_ratio_fit), col='red', lwd=2)
     
     attr(calcium_ratio_fit,"Name") <- sprintf("%sexponential ratiometric fit",type)
+    attr(calcium_ratio_fit,"type") <- type
     attr(calcium_ratio_fit,"Time") <- t
-    attr(calcium_ratio_fit,"RawData") <- Ca
+    attr(calcium_ratio_fit,"tOn") <- tOn
     attr(calcium_ratio_fit,"FitFunction") <- ratio_fit_fct
+    attr(calcium_ratio_fit,"RawData") <- Ca
+    attr(calcium_ratio_fit,"RSSFunction") <- rssFct
     attr(calcium_ratio_fit,"Subset") <- mysubset
+    attr(calcium_ratio_fit,"VocChol") <- vocChol
     
-    class(calcium_ratio_fit) <- c("ratio_fit","nls")
+    class(calcium_ratio_fit) <- c("ratio_fit")
     
     result <- calcium_ratio_fit
   }
   
   return(result)
 }
-

@@ -1,4 +1,4 @@
-`plot.direct_fit` <-
+plot.direct_fit <-
 function(x,
                             y=NULL,
                             numTransient=1,
@@ -239,6 +239,7 @@ function(x,
     adu_res <- residuals(direct_fit)                 ## plots 2&4
     rawDF <- attr(direct_fit,"RawDataFrame")
     nb_B <- attr(rawDF,"nb_B")
+    nb_B <- ifelse(is.null(nb_B),0,nb_B)
     paramNames <- names(coef(direct_fit))
 
     Time <- Time-min(Time,na.rm=TRUE)

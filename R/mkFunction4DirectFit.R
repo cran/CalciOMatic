@@ -1,4 +1,4 @@
-`mkFunction4DirectFit` <-
+mkFunction4DirectFit <-
 function(type="mono",
                                  nb_B=5,
                                  transients=1,
@@ -9,20 +9,20 @@ function(type="mono",
   ## 
   ## Returns a function prediciting the time courses of F_340, F_380 and the
   ## corresponding background measurements, for an exponential time course of [Ca].
-  ##
+  ## 
   ## If type == "mono", the function depends on the following 13 variables:
   ##  - log_Ca0, log_dCa, log_tau, log_phi, log_S_B_340, log_S_B_380,
   ##    R_min, R_max, K_eff, K_d, log_B_T, dB_T and log_tau_B_T
   ##    (see the Ca_MonoExp_fct, B_T_MonoExp_fct and mkFluo_4_DirectFit functions)
-  ##
+  ## 
   ## If type == "bi", the function depends on the following 15 variables:
   ##  - log_Ca0, log_dCa, log_tau, mu, log_dtau, log_phi, log_S_B_340, log_S_B_380,
   ##    R_min, R_max, K_eff, K_d, log_B_T, dB_T and log_tau_B_T
   ##    (see the Ca_BiExp_fct, B_T_MonoExp_fct and mkFluo_4_DirectFit functions)
-  ##
+  ## 
   ## The arguments are:
   ## nb_B, T_340, T_380 and P: see RatioSimulExp for details
-  ##
+  ## 
   ## SQRT: a logical value (TRUE or FALSE, or 1 or 0) indicating whether
   ##       the square root of the fluorescence signal is considered (or the signal itself).
   ##       Setting SQRT to TRUE results in a stabilized variance, independent on the signal value.
@@ -80,7 +80,7 @@ function(type="mono",
   } else {
     S4B <- c(S4B, "B_T <- B_T;")
   }
-    
+  
   ## Get estimated fluorescence signals
   S4B <- c(S4B, "result2 <- mkFluo4DirectFit(Ca=Ca, phi=exp(log_phi), S_B_340=exp(log_S_B_340), S_B_380=exp(log_S_B_380), nb_B=nb_B, R_min=exp(log_R_min), R_max=exp(log_R_max), K_eff=exp(log_K_eff), K_d=exp(log_K_d), B_T=B_T, T_340=T_340, T_380=T_380, P=P, P_B=P_B, SQRT=SQRT);")
   

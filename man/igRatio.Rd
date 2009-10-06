@@ -3,20 +3,18 @@
 \title{Provide an Initial Guess For a Calcium Concentration Ratiometric
   Fit}
 \description{
-  The function \code{IG_Ratio} provides an initial guess for the
+  The function \code{igRatio} provides an initial guess for the
   parameters of an intracellular calcium concentration transient
   obtained after a ratiometric transformation. The transients considered
-  here are either mono- or biexponential. Parameters of a \eqn{F_T}{F_T}
-  transient (instead of a \eqn{[Ca^{2+}]}{Ca^2+} transient) can also be
-  estimated.
+  here are either mono- or biexponential.
 }
 \usage{
 igRatio(Ca, t, tOn = 1, type = "mono")
 }
 \arguments{
-  \item{Ca}{a vector of \eqn{[Ca^{2+}]}{Ca^2+} values (in muM)}
-  \item{t}{a vector of time values at which Ca is computed (in s)}
-  \item{tOn}{the time of the Ca jump (in s)}
+  \item{Ca}{a vector of \eqn{[Ca^{2+}]}{Ca^2+} values (in \eqn{\mu}{mu}M)}
+  \item{t}{a vector of time values at which \eqn{[Ca^{2+}]}{[Ca^2+]} is computed (in s)}
+  \item{tOn}{the time of the \eqn{[Ca^{2+}]}{[Ca^2+]} jump (in s)}
   \item{type}{a character string (either \code{"mono"} or \code{"bi"}),
     indicating which type of exponential decay to consider}
 }
@@ -32,32 +30,27 @@ igRatio(Ca, t, tOn = 1, type = "mono")
     logarithm)}
   \item{\code{log_tau}}{is obtained from a linear regression on a
     rescaled (by \code{dCa}) and time offset (by \code{Ca0}) version of
-    the original signal (and taking its logarithm)} \newline \newline
+    the original signal (and taking its logarithm)}
   }
 If \code{type} is set to \code{"bi"}, two more parameters (\code{mu} and
 \code{log_dtau}) are guessed. For that purpose, the slow time constant
 of the signal is first guessed: successive linear fits of the end part
 of the signal log-normalized signal (of increasing lengths, from T to
-Tend, with decreasing T) are performed, until the fitted time constant
-reaches T. Then, \eqn{\tau_s}{tau_s} is set to T and its relative weight
-(from which \code{mu} arises) is deduced from the fit
-intercept. Considering the original slope of the signal then leads to
-the fast time constant of the biexponential decay (\code{tau}), thus, to
-\code{dtau}.
+Tend, with decreasing values of T) are performed, until the fitted time
+constant does not change anymore. Then, \eqn{\tau_s}{tau_s} is set to T
+and its relative weight (from which \code{mu} arises) is deduced from
+the fit intercept. Considering the slope of the signal at the peak then
+leads to the fast time constant of the biexponential decay (\code{tau}),
+thus, to \code{dtau}.
 }
 \value{
   A named list of class \code{"initial_guess"}, containing initial
   guesses (IG) for the three/five scalar following components of the
   mono- or bi- exponential calcium decay:
-  \item{log_Ca0}{IG for the logarithm of the signal baseline (which is
-    always positive in the case of a \eqn{[Ca^{2+}]}{Ca^2+} or
-    \eqn{[F_T]}{F_T} concentration)}
-  \item{log_dCa}{IG for the logarithm of the signal jump, if \code{F_T}
-    is set to \code{TRUE} (indeed, the \eqn{[Ca^{2+}]}{Ca^2+}
-    concentration jump is always positive)}
-  \item{dCa}{IG for the signal jump, if \code{F_T} is set to \code{TRUE}
-    (indeed, the \eqn{[F_T]}{F_T} concentration jump can be eiter
-    positive or negative)}
+  \item{log_Ca0}{IG for the logarithm of the baseline
+    \eqn{[Ca^{2+}]}{Ca^2+}}
+  \item{log_dCa}{IG for the logarithm of the \eqn{[Ca^{2+}]}{Ca^2+}
+    jump}
   \item{log_tau}{IG for the logarithm of the time constant of the
     monexponential decay (if \code{type} is set to \code{"mono"}) or the
     fast time constant of the biexponential decay (if \code{type} is set
@@ -84,10 +77,10 @@ dCa <- 0.25
 tau <- 1.5
 
 ## Calibration parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = FALSE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = FALSE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = FALSE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = FALSE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=FALSE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=FALSE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=FALSE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=FALSE)
 
 ## Experiment-specific parameters
 nb_B    <- 1
@@ -105,8 +98,7 @@ Ca <- caMonoExp(t=Time,
                 tOn=tOn,
                 Ca0=Ca0,
                 dCa=dCa,
-                tau=tau
-                )
+                tau=tau)
 
 ## Simulate the corresponding ratiometric experiment
 df <- ratioExpSimul(nb_B    = nb_B,

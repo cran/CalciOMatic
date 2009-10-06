@@ -1,5 +1,4 @@
-`mkFunction4RatioFit` <-
-function(type="mono") {
+mkFunction4RatioFit <- function(type="mono") {
   ## Function mkFunction4RatioFit
   ##
   ## Returns a function prediciting the exponential time course of [Ca].
@@ -37,4 +36,3 @@ function(type="mono") {
 
   return(result)
 }
-

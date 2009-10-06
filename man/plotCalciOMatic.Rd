@@ -39,13 +39,12 @@ plotCalciOMatic(x = NULL, y = NULL, n = 1, x2 = NULL, y2 = NULL,
     (horizontal)}
   \item{oma}{a vector of length 4 specifying the outer margin of the figure}
   \item{mar}{a vector of length 4 specifying the margin of the panel to add}
-  \item{ask}{a logical value (\code{FALSE} by default). If set to
-    \code{TRUE}, three or four symbols (among the followings: left
-    arrow, red circle, black square and right arrow) are added at the
-    bottom right of the plot, on which the user is allowed to click to
-    perform any action. In that case, a character string is returned,
-    telling what the user asked for. This option is useful when
-    \code{plot.calciomatic} is called by a high-level plot method}
+  \item{ask}{a logical value. Set to \code{FALSE} to draw all plots on
+    the same figure. If set to \code{TRUE}, a single device will be
+    opened, in which the first plot will be drawn. Three symbols (left
+    arrow, black square and right arrow) will be added at the bottom
+    right of the plot, for interactions with the user (see details
+    below)}
   \item{\dots}{one or more of the following plot parameters:
     \code{"cex"}, \code{"cex.axis"}, \code{"cex.lab"},
     \code{"cex.main"}, \code{"font"}, \code{"font.axis"},
@@ -55,7 +54,7 @@ plotCalciOMatic(x = NULL, y = NULL, n = 1, x2 = NULL, y2 = NULL,
     \code{"mgp.x"}, \code{"mgp.y"}}
 }
 \details{
-  The first argument of the \code{plot.calciomatic} function is an
+  The third argument of the \code{plot.calciomatic} function is an
   integer \code{n} comprised between 1 and 5. The plot drawn directly
   depends on the value of \code{n}, as follows:
   \itemize{
@@ -68,26 +67,33 @@ plotCalciOMatic(x = NULL, y = NULL, n = 1, x2 = NULL, y2 = NULL,
 		    at y=0 (color \code{col2}). Used to plot fit
 		    residuals}
   \item{\code{n=3}}{plot a bar plot, with \code{y} of class \code{"acf"}
-                    (color \code{col}), and add horizontal lines at
-                    \eqn{%
-                    y=\pm\frac{1.96}{\sqrt{\code{length(y$acf)}}}
+                    (color \code{col}), and add a \eqn{95\%}{95\%}
+		    confidence band between 
+                    \eqn{
+		      y= - 1.96 / \sqrt{\code{length(y[["acf"]])}}
 	            }{
-                    y=+/-1.96*sqrt(length(y$acf))
-	            } 
-	            (color \code{col2}). Used to plot the
+                      y= - 1.96 /sqrt(length(y$acf))
+	            }
+		    and
+                    \eqn{
+		      y= + 1.96 / \sqrt{\code{length(y[["acf"]])}}
+	            }{
+                      y= + 1.96 /sqrt(length(y$acf))
+	            }
+		    (color \code{col2}). Used to plot the
 		    auto-correlation function of the residuals}
   \item{\code{n=4}}{plot \code{y} vs. \code{x} (type \code{points} and
-                    color \code{col}), and add a diagonal dashed line
-		    (color \code{col2}). Used to plot quantile-quantile
-		    plots of the fit residuals}
+                    color \code{col}), add a diagonal dashed line
+		    (color \code{col}) and a \eqn{95\%}{95\%}
+		    confidence band (color \code{col2}). Used to plot
+		    quantile-quantile plots of the fit residuals}
   \item{\code{n=5}}{plot an histogram of \code{x} (color \code{col}),
                     and add vertical dashed lines at -3/-2/-1/0/1/2/3
 		    times the standard deviation of \code{x} (color
 		    \code{col2}). Used to plot the histogram of the fit
 		    residuals}
-		  
-		}
-	      }
+  }
+}
 \value{
   When \code{ask} is set to its default \code{FALSE} value, a plot is
   drawn, and nothing else is returned by the function. If \code{ask} is
@@ -113,10 +119,10 @@ dCa  <- 0.25
 tau  <- 1.5
 
 ## Calibrated parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = TRUE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = TRUE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = TRUE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = TRUE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=TRUE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=TRUE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=TRUE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=TRUE)
 
 ## Experiment-specific parameters
 nb_B    <- 1

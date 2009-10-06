@@ -1,4 +1,4 @@
-`plotCalciOMatic` <-
+plotCalciOMatic <-
 function(x=NULL,
                             y=NULL,
                             n=1,
@@ -98,7 +98,7 @@ function(x=NULL,
       assign(var2check[k],varNominalValues[[k]])
     }
   }
-    
+  
   ## ------------
   ## Compute xlim
   if(xlim == Inf) {

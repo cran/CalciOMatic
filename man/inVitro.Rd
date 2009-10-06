@@ -3,7 +3,7 @@
 \docType{data}
 \title{Calcium Transients and Fura 2 Loading Curves}
 \description{
-  Data from 20 in vitro experiments performed on cockroaches
+  Data from 20 \emph{in vitro} experiments performed on cockroaches
   (\emph{Periplaneta americana}) antennal lobe neurons. Each data set
   contains a list of experimental results made of the fura 2 loading
   curve (measured at 360 nm) and 3 (or 2) calcium transients (measured
@@ -75,7 +75,7 @@
   of 3.
 }
 \source{
-  Andreas Pippow <\email{andreas.pippow@uni-koeln.de}> did the experiments
+  Andreas Pippow \email{andreas.pippow@uni-koeln.de} did the experiments
 }
 \examples{
 data(inVitro)

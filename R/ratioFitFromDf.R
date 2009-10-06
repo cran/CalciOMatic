@@ -1,16 +1,13 @@
-`ratioFitFromDf` <-
-function(df,
+ratioFitFromDf <- function(df,
                            transients=1,
                            type="mono",
                            ig=NULL,
                            Plot=FALSE,
                            Fit=TRUE,
-                           AfterPeak=FALSE,
-                           Trace=FALSE,
-                           WarnOnly=TRUE
+                           AfterPeak=FALSE
                            ) {
   ## Function ratioFitFromDf
-  ##
+  ## 
   ## Fit one or several of the fluorescence signals contained
   ## in the data frame 'df', with the ratiometric method.
   ## The resulting calcium signal is fitted with a mono- or
@@ -70,17 +67,15 @@ function(df,
                                                ig=ig,
                                                Plot=Plot,
                                                Fit=Fit,
-                                               AfterPeak=AfterPeak,
-                                               Trace=Trace,
-                                               WarnOnly=WarnOnly
+                                               AfterPeak=AfterPeak
                                                )
-
+      
       attr(calcium_ratio_fit[[k]],"RawDataFrame") <- df
     }
   }
   
   class(calcium_ratio_fit) <- "ratio_fit_list"
-
+  
   ## Special case: length(df_transients) == 1
   if(length(transients) == 1) {
     calcium_ratio_fit <- calcium_ratio_fit[[transients]]
@@ -88,4 +83,3 @@ function(df,
   
   return(calcium_ratio_fit)
 }
-

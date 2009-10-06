@@ -1,4 +1,4 @@
-`caMonoExp` <-
+caMonoExp <-
 function(t=1,
                       tOn=1,
                       Ca0=0.05,
@@ -16,13 +16,8 @@ function(t=1,
   ## tau: time constant (in s) of the monoexponential return to baseline
 
   ## Create the monoexponential calcium transient
-  result <- Ca0 + dCa * sapply(t,
-                               function(T)
-                               ifelse(T>=tOn,
-                                      exp(-(T-tOn)/tau),
-                                      0)
-                               )
-
+  result <- Ca0 + dCa * ifelse(t>=tOn, exp(-(t-tOn)/tau), 0)
+  
   attr(result,"Time") <- t
   attr(result,"tOn") <- tOn  
   

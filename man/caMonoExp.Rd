@@ -4,7 +4,7 @@
   Concentration}
 \description{
   The function \code{caMonoExp} returns a vector of intracellular
-  calcium concentration (Ca) vs time values \code{t}. A \code{dCa} jump
+  calcium concentration (\eqn{[Ca^{2+}]}{[Ca^2+]}) vs time values \code{t}. A \code{dCa} jump
   occurs at \code{tOn}, followed by a monoexponential return to baseline
   value \code{Ca0}, with time constant \code{tau}.
 }
@@ -12,15 +12,15 @@
 caMonoExp(t = 1, tOn = 1, Ca0 = 0.05, dCa = 0.1, tau = 3)
 }
 \arguments{
-  \item{t}{a vector of time values at which Ca is computed (in s)}
-  \item{tOn}{the time of the Ca jump (in s)}
-  \item{Ca0}{the baseline Ca (in muM)}
-  \item{dCa}{the Ca jump occuring at \code{tOn} (in muM)}
-  \item{tau}{the time constant of the Ca monoexponential return to
+  \item{t}{a vector of time values at which \eqn{[Ca^{2+}]}{[Ca^2+]} is computed (in s)}
+  \item{tOn}{the time of the \eqn{[Ca^{2+}]}{[Ca^2+]} jump (in s)}
+  \item{Ca0}{the baseline \eqn{[Ca^{2+}]}{[Ca^2+]} (in \eqn{\mu}{mu}M)}
+  \item{dCa}{the \eqn{[Ca^{2+}]}{[Ca^2+]} jump occuring at \code{tOn} (in \eqn{\mu}{mu}M)}
+  \item{tau}{the time constant of the \eqn{[Ca^{2+}]}{[Ca^2+]} monoexponential return to
     baseline (in s)}
 }
 \value{
-  A vector containing the Ca values. The vector has the two following
+  A vector containing the \eqn{[Ca^{2+}]}{[Ca^2+]} values. The vector has the two following
   attributes:
   \item{Time}{a copy of argument \code{t}}
   \item{tOn}{a copy of argument \code{tOn}}

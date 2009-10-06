@@ -20,7 +20,7 @@ directFit(df, transients = c(1, 2, 3), SQRT = TRUE, ratio = NULL,
     structure of the input data frame must be the same as the one
     defined in \code{\link{ratioExpSimul}}}
   \item{transients}{a vector of integers giving the numbers of the
-    transients to fit}
+    transients to fit simultaneously}
   \item{SQRT}{a logical value. Set to TRUE (default) to fit the square
     root of the fluorescence signals}
   \item{ratio}{an object of class \code{"initial_guess"} or
@@ -42,7 +42,7 @@ directFit(df, transients = c(1, 2, 3), SQRT = TRUE, ratio = NULL,
   \item{AfterPeak}{a logical or numerical value. Set to \code{FALSE} to perform the
     fit on the whole fluorescence transients, to \code{TRUE} to consider
     only the part before the fluorescence jump and the convex part after the
-    fluorescence peak, for both signals, or to an integer to skip a
+    fluorescence peak (for both signals), or to an integer to skip a
     given number of samples after the fluorescence jump}
   \item{Trace}{a logical value. Set to \code{TRUE} to print results for
     successive steps of the optimization algorithm}
@@ -56,28 +56,28 @@ directFit(df, transients = c(1, 2, 3), SQRT = TRUE, ratio = NULL,
   Gauss-Newton.
   
   The initial guesses for the experiment-specific parameters are
-  calculated with the \code{igDirect} function. If the \code{"USE_se"}
+  calculated with the \code{\link{igDirect}} function. If the \code{"USE_se"}
   field of the calibration parameters and \code{alpha} are set to
   \code{TRUE}, the initial guesses for these parameters are given by
-  their expermental mean value (or, for \code{alpha}, by 
+  their experimental mean value.
   
-  The quality of the direct fit is based on the probabilisitc properties
+  The quality of the direct fit is based on the probabilistic properties
   of the fluorescence signals, which are described as realizations of
   Poisson processes. For values of parameter above about 10, the
   Poissonian distribution can be approximated by a Gaussian distribution
   with variance equal to the mean. Applying the square root
-  transformation (by setting the \code{SQRT}logical argument to
+  transformation (by setting the \code{SQRT} logical argument to
   \code{TRUE}) to such a process leads to a stabilization of the
   variance, which becomes equal to \eqn{\frac{1}{4}}{1/4}. Thus, one is
   brought back to a standard nonlinear regression setting. Moreover, in
-  this situation it is possible to account for the limited precision
+  this situation, it is possible to account for the limited precision
   with which the calibration parameters are known. For this purpose, these
   parameters are also fitted, and a weight of
   \eqn{\frac{1}{\sigma_{exp}^2}}{1/sigma_exp^2} is applied to each of
   them (\eqn{\frac{1}{\sigma_{exp}}}{1/sigma_exp} referring to the
   experimental standard error to the mean (sem)). The whole signal to fit is thus the following:
   \deqn{%
-    \left(B_{340}, F_{340}, B_{380}, F_{380}, R_{min}, R_{max}, K_eff, K_d
+    \left(B_{340}, F_{340}, B_{380}, F_{380}, R_{min}, R_{max}, K_{eff}, K_d
     \right),
   }{c(B_340, F_340, B_380, F_380, R_min, R_max, K_eff, K_d),
   }
@@ -112,13 +112,14 @@ directFit(df, transients = c(1, 2, 3), SQRT = TRUE, ratio = NULL,
 \seealso{\code{\link{transientConvexPart}}, 
   \code{\link{mkFluo4DirectFit}}, 
   \code{\link{igDirect}},
-  \code{\link{ratioExpSimul}}
+  \code{\link{ratioExpSimul}},
+  \code{\link{ratioExpPhysio}}
 }
 \examples{
 ## Direct Fit On Simulated Data
 ## (parameters set to the value in Table 2 from
-## Joucla et al. (2009, Journal of Neurophysiology)
-## ================================================
+## Joucla et al. (2009) (Journal of Neurophysiology))
+## ==================================================
 
 ## Parameters of the monoexponential calcium transient
 tOn  <- 1
@@ -128,10 +129,10 @@ dCa  <- 0.25
 tau  <- 1.5
 
 ## Calibrated parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = TRUE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = TRUE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = TRUE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = TRUE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=TRUE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=TRUE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=TRUE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=TRUE)
 
 ## Experiment-specific parameters
 nb_B    <- 1
@@ -175,22 +176,20 @@ direct_fit <- directFit(df = df,
                         type = "mono")
 
 ## Plot the raw and fitted data as well as goodness of fit tests
-plot(direct_fit,
-     numTransient=1,
-     items=1:6)
+plot(direct_fit, numTransient=1, items=1:6)
 
 ## Direct Fit On Physiological Data
-## (reproduces Fig. 6 of Joucla et al. (2009)
-## ==========================================
+## (reproduces Fig. 6 of Joucla et al. (2009))
+## ===========================================
 
 ## Load the data from cockroach olfactory interneurons
 data(inVitro)
 
 ## Calibrated parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = TRUE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = TRUE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = TRUE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = TRUE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=TRUE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=TRUE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=TRUE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=TRUE)
 
 ## Create the data frame containing the physiological data
 ## (experiment #2, stimulation #2)
@@ -205,7 +204,7 @@ physioData <- ratioExpPhysio(dataset="inVitro",
                              alphamethod=TRUE)
 
 ## Fit the physiological data with the direct method
-## (skip 14 samples of the signal after tOn
+## (skip 14 samples of the signal after tOn)
 physiolDirectFit <- directFit(physioData,
                               transients=2,
                               SQRT=TRUE,
@@ -213,7 +212,5 @@ physiolDirectFit <- directFit(physioData,
                               AfterPeak=14)
 
 ## Plot the raw and fitted data as well as goodness of fit tests
-plot(physiolDirectFit,
-     numTransient=2,
-     items=1:6)
+plot(physiolDirectFit, numTransient=2, items=1:6)
 }

@@ -1,9 +1,8 @@
-`fluo` <-
-function(Ca=1,
+fluo <- function(Ca=1,
                  R_min=0.136,
                  R_max=2.701,
                  K_eff=3.637,
-                 K_d=0.58,
+                 K_d=0.583,
                  B_T=100,
                  phi=1.25,
                  S_B=10,
@@ -44,4 +43,3 @@ function(Ca=1,
   
   return(result)
 }
-

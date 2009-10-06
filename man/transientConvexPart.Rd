@@ -21,7 +21,7 @@ transientConvexPart(transient, t = 1, tOn = 1)
   transients of the following form: First, prior to \code{tOn}, a
   baseline; Then, at \code{tOn}, a sharp (positive or negative) jump,
   which leads to a global maximum or minimum; Finally, a monotonic
-  return to baseline. Real \eqn{[Ca^{2+}]}{Ca^2+} or Fluorescence
+  return to baseline. Real \eqn{[Ca^{2+}]}{Ca^2+} or fluorescence
   transients, on which this function is applied, are generally of this
   form. The function smoothes the input transient, finds the time (after
   the peak) at which the second derivative changes sign, and returns its

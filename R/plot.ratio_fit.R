@@ -1,5 +1,4 @@
-`plot.ratio_fit` <-
-function(x,
+plot.ratio_fit <- function(x,
                            y=NULL,
                            items=1:5,
                            col="black",
@@ -132,17 +131,24 @@ function(x,
   
   ## Retrieve relevant data to plot, from the ratio_fit object
   Name <- attr(ratio_fit,"Name")
-  Time <- attr(ratio_fit,"Time")               ## plot 1
-  Ca_raw <- attr(ratio_fit,"RawData")          ## plot 1
-  Ca_fit <- predict(ratio_fit)                 ## plot 1
-  subset <- attr(ratio_fit,"Subset")           ## plots 1&2
+  Time <- attr(ratio_fit,"Time")                  ## plot 1
+  tOn <- attr(ratio_fit,"tOn")                    ## plot 1
+  tOn <- tOn-min(Time)                            ## plot 1
+  Time <- Time-min(Time)                          ## plot 1
+  Ca_raw <- attr(ratio_fit,"RawData")             ## plot 1
+  Fit_fct <- attr(ratio_fit,"FitFunction")        ## plot 1
+  subset <- attr(ratio_fit,"Subset")              ## plots 1&2
   if(is.null(subset)) subset <- 1:length(Time)
-  Ca_res <- residuals(ratio_fit)               ## plot 2
-  ACF <- acf(Ca_res,lag.max=25,plot=FALSE)     ## plot 3
-  QQNORM <- qqnorm(Ca_res,plot.it=FALSE)       ## plot 4
+  Param <- ratio_fit$par                          ## plot 1
+  if(length(Param) == 3) {                        ## plot 1
+    Ca_fit <- Fit_fct(Time[subset], tOn, Param[1], Param[2], Param[3])
+  } else if(length(Param) == 5) {
+    Ca_fit <- Fit_fct(Time[subset], tOn, Param[1], Param[2], Param[3], Param[4], Param[5])
+  }
+  Ca_res <- Ca_raw[subset] - Ca_fit               ## plot 2
+  ACF <- acf(Ca_res,lag.max=25,plot=FALSE)        ## plot 3
+  QQNORM <- qqnorm(Ca_res,plot.it=FALSE)          ## plot 4
 
-  Time <- Time-min(Time)
-  
   ## Define the x and y, x2 and y2 arrays for the plot
   x_list <- vector("list", 5)
   x_list[[1]] <- Time
@@ -262,4 +268,3 @@ function(x,
     }
   }
 }
-

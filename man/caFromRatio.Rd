@@ -24,34 +24,34 @@ caFromRatio(adu_B_340, adu_340,
   \item{adu_380}{a vector of fluorescence values recorded at 380 nm}
   \item{T_340}{the exposure time at 340 nm (in s)}
   \item{T_380}{the exposure time at 380 nm (in s)}
-  \item{P}{the number of pixels od the Region Of Interest (ROI)}
-  \item{P_B}{the number of pixels od the Beckground Region}
+  \item{P}{the number of pixels of the Region Of Interest (ROI)}
+  \item{P_B}{the number of pixels of the Background Region}
   \item{R_min}{the minimum fluorescence ratio between the measurements
     at 340 and 380 nm. This parameter is obtained from calibration experiments}
   \item{R_max}{the maximum fluorescence ratio between the measurements
     at 340 and 380 nm. This parameter is obtained from calibration experiments}
   \item{K_eff}{the effective dissociation constant of the dye in the cell (in
-    muM). This parameter is obtained from calibration experiments}
-  \item{Plot}{a logical value: Set to TRUE to plot the calcium transient
-    deduced from the ratiometric transformation}
+    \eqn{\mu}{mu}M). This parameter is obtained from calibration experiments}
+  \item{Plot}{a logical value: Set to \code{TRUE} to plot the calcium
+    transient estimated by the ratiometric transformation}
 }
 \details{
   The calcium imaging technique makes use of the ability of a
   fluorescent dye (e.g. Fura) to bind with calcium ions present inside
-  a neural cell. Briefly, photons emitted by the calcium-free and
+  the cell. Briefly, the photons emitted by the calcium-free and
   calcium-bound forms of the dye are recorded by a CCD camera, following
-  the illumination of the tissue by a laser at relevant wavelengths
-  (corresponding to the excitation maxima of the free and bound forms of
+  the illumination of the tissue by a light source at relevant wavelengths
+  (corresponding to maxima of excitation of the free and bound forms of
   the dye). In the case of a ratiometric dye, an algebraic relationship
-  links the intracellular calcium concentration and the photon counts at
-  both wavelnegths (340 and 380 nm, in the case of Fura-2). It is thus
+  links the intracellular calcium concentration to the photon counts at
+  both wavelengths (340 and 380 nm, in the case of Fura-2). It is thus
   possible to retrieve the intracellular calcium concentration from the
-  ratio of the photon counts recorded at these two wavelenghts (after
-  substraction of the background fluorescence): This is the ratiometric
+  ratio of the photon counts recorded at these two wavelengths (after
+  subtraction of the background fluorescence): This is the ratiometric
   transformation. The ratio \eqn{R}{R} is defined as:
 \deqn{%
-R = \frac{\frac{1}{P} \cdot adu_{340} - \frac{1}{P_B} \cdot
-  adu_{B,340}}{\frac{1}{P} \cdot adu_{380} - \frac{1}{P_B} \cdot adu_{B,380}} \cdot \frac{T_{380}}{T_{340}} = %
+R = \frac{P^{-1} \cdot adu_{340} - P_B^{-1} \cdot
+  adu_{B,340}}{P^{-1} \cdot adu_{380} - P_B^{-1} \cdot adu_{B,380}} \cdot \frac{T_{380}}{T_{340}} = %
 \frac{R_{min} \cdot K_{eff} + R_{max} \cdot [Ca^{2+}]}{K_{eff} + [Ca^{2+}]}.
 }{%
 R = (1/P*adu_340-1/P_B*adu_B_340)/(1/P*adu_380-1/P_B*adu_B_380)*T_380/T_340 = (R_min*K_eff+R_max*[Ca^2+])/(K_eff+[Ca^2+]).
@@ -64,10 +64,15 @@ Ca^2+ = K_eff * (R-R_min) / (R_max-R)
 }
 }
 \value{
-  A vector of intracellular calcium concentrations calculated with the
-  ratiometric transformation described above.
+  A vector of intracellular calcium concentration calculated with the
+  ratiometric transformation described above. This vector comes with the
+  estimated covariance matrix as attribute (see Joucla et al. (2009) for
+  more details).
 }
-\references{the CalciOMatic manuscript submitted to the Journal of Neuropysiology}
+\references{Joucla S, Pippow A, Kloppenburg P and Pouzat C (2009)
+  Quantitative estimation of calcium dynamics from ratiometric
+  measurements: a direct, non-ratioing, method, Journal of
+  Neurophysiology, in revision}
 \author{Sebastien Joucla \email{sebastien.joucla@parisdescartes.fr}}
 \examples{
 ## (0) "Experimental" parameters
@@ -80,10 +85,10 @@ dCa <- 0.25
 tau <- 1.5
 
 ## Calibration parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = TRUE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = TRUE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = TRUE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = TRUE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=TRUE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=TRUE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=TRUE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=TRUE)
 
 ## Experiment-specific parameters
 nb_B    <- 5

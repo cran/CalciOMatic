@@ -1,4 +1,4 @@
-`plot.ratio_fit_list` <-
+plot.ratio_fit_list <-
 function(x,
                                 y=NULL,
                                 numTransient=1,

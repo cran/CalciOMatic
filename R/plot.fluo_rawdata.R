@@ -1,4 +1,4 @@
-`plot.fluo_rawdata` <-
+plot.fluo_rawdata <-
 function(x,
                               y=NULL,
                               numTransient=1,
@@ -39,7 +39,7 @@ function(x,
   ## -----------------------------------------------
   ## Test the characteristics of the input arguments
   df <- x
-  
+ 
   if(!inherits(df,"fluo_rawdata")) {
     stop("use plot.fluo_rawdata only with objects of class 'fluo_rawdata'")
   }
@@ -92,9 +92,15 @@ function(x,
   }
   
   ## Manage the different transients to work with
-  transients <- unique(with(df,transient[transient != 0]))
+  ## transients0 <- levels(unique(df$transient))
+  transients0 <- unique(df$transient)
+  transients <- as.numeric(transients0)
+  transients <- transients[is.finite(transients)]
+  ## transients <- unique(with(df,transient[transient != 0]))
   if(missing(numTransient)) numTransient <- transients
   transients <- sort(intersect(transients,numTransient))
+
+  print(transients)
   
   ## ----------------------------------------------------------
   ## Plot the figures corresponding to the different transients

@@ -21,7 +21,7 @@ igDirect(adu_B_340, adu_340, adu_B_380, adu_380,
   \item{adu_B_380}{the background fluorescence at 380 nm}
   \item{adu_380}{the fluorescence transient at 380 nm}
   \item{ig_ratio}{the initial guess list for the parameters of the
-  \eqn{[Ca^{2+}]}{Ca^2+} transient, returned by the \code{IG_Ratio}
+  \eqn{[Ca^{2+}]}{Ca^2+} transient, returned by the \code{igRatio}
   function}
   \item{t}{a vector of time values at which the fluorescence values were
   obtained (in s)}
@@ -44,8 +44,8 @@ igDirect(adu_B_340, adu_340, adu_B_380, adu_380,
       M}{muM})}
   \item{T_340}{the exposure time at 340 nm (in s)}
   \item{T_380}{the exposure time at 380 nm (in s)}
-  \item{P}{the number of pixels od the Region Of Interest (ROI)}
-  \item{P_B}{the number of pixels od the Beckground Region}
+  \item{P}{the number of pixels of the Region Of Interest (ROI)}
+  \item{P_B}{the number of pixels of the Background Region}
 }
 \details{
   The intial guesses for \code{log_S_B_340} and \code{log_S_B_380} are
@@ -73,8 +73,8 @@ igDirect(adu_B_340, adu_340, adu_B_380, adu_380,
   }
 
   In these formulas, \eqn{[Ca^{2+}]_{ratio}}{Ca_ratio} refers to the
-  calcium concentration transient estimated with the initial guess
-  parameters listed in the \code{ig_ratio} argument
+  calcium concentration transient estimated with the initial guess of
+  the parameters listed in the \code{ig_ratio} argument
 }
 \value{
   A named list of class \code{"initial_guess"}, containing initial
@@ -101,10 +101,10 @@ Ca <- caMonoExp(t = Time, tOn = tOn,
                 Ca0 = Ca0, dCa = dCa, tau = tau)
 
 ## Calibrated parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = TRUE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = TRUE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = TRUE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = TRUE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=TRUE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=TRUE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=TRUE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=TRUE)
 
 ## Experiment-specific parameters
 nb_B    <- 1
@@ -164,7 +164,8 @@ ratio_fit <- ratioFitFromCa(Ca_noisy, t=Time, tOn, type="mono")
 
 ## List the fitted parameters and create
 ## the corresponding calcium transient
-ig_mono <- as.list(coefficients(ratio_fit))
+ig_mono <- as.list(ratio_fit$par)
+names(ig_mono) <- c("log_Ca0","log_dCa","log_tau")
 class(ig_mono) <- "initial_guess"
 
 ## Perform an Initial Guess for the Experiment-Specific Parameters

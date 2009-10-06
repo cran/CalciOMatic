@@ -1,12 +1,12 @@
 \name{mkFunction4RatioFit}
 \alias{mkFunction4RatioFit}
-\title{Function for Ratiometric Fit}
+\title{Function for Ratiometric Fit with the nls function}
 \description{
   The function \code{mkFunction4RatioFit} returns a function
   prediciting the exponential time course of an intracellular
-  concentration. The function, the arguments of which depends on the
-  value of \code{type}, can be passed to the \code{nls} formula, for a
-  ratiometric fit
+  concentration. The function, the arguments of which depend on the
+  value of \code{type}, can be used within the RSS function of a
+  ratiometric fit.
 }
 \usage{
 mkFunction4RatioFit(type = "mono")
@@ -18,11 +18,11 @@ mkFunction4RatioFit(type = "mono")
 \value{
   A function that has five or seven arguments, depending on the
   value of \code{type}. If \code{type} is set to \code{"mono"}, the five
-  arguments are the following: \code{t},\code{tOn}, \code{log_Ca0},
+  arguments are the following: \code{t}, \code{tOn}, \code{log_Ca0},
   \code{log_dCa} and \code{log_tau}. If \code{type} is set to
   \code{"bi"}, the output function has two more arguments: \code{mu} and
   \code{log_dtau}. For details about the meaning of each argument, see
-  the \code{Ca_MonoExp_fct} or \code{Ca_BiExp_fct} functions
+  the \code{\link{caMonoExp}} or \code{\link{caBiExp}} functions
 }
 \author{Sebastien Joucla \email{sebastien.joucla@parisdescartes.fr}}
 \seealso{\code{\link{caMonoExp}}, \code{\link{caBiExp}},

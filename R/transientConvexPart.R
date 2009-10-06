@@ -1,4 +1,4 @@
-`transientConvexPart` <-
+transientConvexPart <-
 function(transient,
                                 t=1,
                                 tOn=1

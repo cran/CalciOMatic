@@ -1,4 +1,4 @@
-`caFromDf` <-
+caFromDf <-
 function(df,
                      numTransient=1,
                      Plot=FALSE) {
@@ -6,7 +6,7 @@ function(df,
   ## Returns a vector of estimated [Ca] values using the "classical"
   ## ratiometric method, from a data frame containing the 4 adu vectors,
   ## the stimulation durations and the calibration parameters
-  ##
+  ## 
   ## df: a simulated data frame returned by RatioSimulExp,
   ##     or an experimental data frame returned by RatioPhysioExp
   ##     [for details about the structure of the data frame, see Ratiometric_Experiments.R]
@@ -21,7 +21,7 @@ function(df,
   
   adu_340 <- with(df,adu[is.finite(Time) & lambda==lambda_vec[1] & transient==numTransient])
   adu_380 <- with(df,adu[is.finite(Time) & lambda==lambda_vec[2] & transient==numTransient])
-
+  
   t <- with(df,Time[is.finite(Time) & lambda==lambda_vec[1] & transient==numTransient])
   tOn <- attr(df,"tOn")[numTransient]
   
@@ -33,7 +33,7 @@ function(df,
   R_min <- attr(df,"R_min")
   R_max <- attr(df,"R_max")
   K_eff <- attr(df,"K_eff")
-
+  
   Ca <- caFromRatio(adu_B_340=adu_B_340,
                     adu_340=adu_340,
                     adu_B_380=adu_B_380,
@@ -47,10 +47,10 @@ function(df,
                     K_eff=K_eff,
                     Plot=Plot
                     )
-
+  
   attr(Ca,"Time") <- t
   attr(Ca,"tOn") <- tOn
-
+  
   if(Plot==TRUE) plot(t,Ca,type="l")
   
   return(Ca)

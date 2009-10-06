@@ -8,9 +8,8 @@
   or a biexponential decay, depending on the value of \code{type}
 }
 \usage{
-ratioFitFromDf(df, transients = 1, type = "mono", ig = NULL,
-               Plot = FALSE, Fit = TRUE, AfterPeak = FALSE,
-               Trace = FALSE, WarnOnly = TRUE)
+ratioFitFromDf(df, transients = 1, type = "mono",ig = NULL,
+               Plot = FALSE, Fit = TRUE, AfterPeak = FALSE)
 }
 \arguments{
   \item{df}{a data frame of class \code{"fluo_rawdata"} containing all
@@ -24,7 +23,7 @@ ratioFitFromDf(df, transients = 1, type = "mono", ig = NULL,
     specifying the type of calcium exponential decay to consider}
   \item{ig}{an object of class \code{"initial_guess"}, giving values of
     the calcium dynamics parameters to initiate the fitting process with
-    using \code{nls}. This is a list with the following fields:
+    using \code{nls}. This is a list including the following fields:
     (\code{"log_Ca0"}, \code{"log_dCa"}, \code{"log_tau"} for a
     monoexponential decay, eventually \code{"mu"} and \code{"log_dtau"}
     for a biexponential decay). If \code{ig} is not an object of class
@@ -37,26 +36,15 @@ ratioFitFromDf(df, transients = 1, type = "mono", ig = NULL,
   \item{AfterPeak}{a logical or numerical value. Set to \code{FALSE} to perform the
     fit on the whole fluorescence transients, to \code{TRUE} to consider
     only the part before the fluorescence jump and the convex part after the
-    fluorescence peak, for both signals, or to an integer to skip a
+    fluorescence peak (for both signals), or to an integer to skip a
     given number of samples after the fluorescence jump}
-  \item{Trace}{a logical value. Set to \code{TRUE} to print results for
-    successive steps of the optimization algorithm}
-  \item{WarnOnly}{a logical value. Set to \code{TRUE} to go on even if
-    the fit produced an error}
 }
 \details{
   The calcium concentration (\eqn{[Ca^{2+}]}{Ca^2+}) is deduced from the
-  ratiometric transformation (see \code{\link{caFromRatio}}).
-  
-  A mono- or bi-exponential fit is performed using the \code{nls}
-  function, which determines the nonlinear (weighted) least-squares
-  estimates of the parameters of a nonlinear model. The algorithm is set
-  to the default Gauss-Newton. The weights are determined from estimates
-  of the variance of the \eqn{[Ca^{2+}]}{Ca^2+} with time, obtained
-  using the error propagation method.
-  
-  The initial guesses for the calcium dynamics parameters, if not given
-  in \code{"ig"}, are calculated with the \code{igRatio} function
+  ratiometric transformation (see \code{\link{caFromRatio}}). A mono- or
+  bi-exponential decay is fitted to the \eqn{[Ca^{2+}]}{Ca^2+} signal,
+  using the \code{optim} function. For more details, see
+  \code{\link{ratioFitFromCa}}.
 }
 \value{
   An object that inherits from both \code{"nls"} and either
@@ -65,9 +53,7 @@ ratioFitFromDf(df, transients = 1, type = "mono", ig = NULL,
   case, the output \code{"ratio_fit_list"} object is a list of
   \code{"ratio_fit"} objects, which have the following attributes:
   \item{"Name"}{a character string telling which type of fit has been performed}
-  \item{"Time"}{the whole time vector, which includes
-    \code{NA}s/\code{NaN}s for the background fluorescence signals and
-    the supplementary calibration parameters, when relevant}
+  \item{"Time"}{the whole time vector (in s)}
   \item{"RawData"}{the \eqn{[Ca^{2+}]}{Ca^2+} signal deduced from the
   ratiometric transformation. This signal, which is the one passed to
   the \code{nls} formula, has two attributes: \code{"var"} is the vector
@@ -79,8 +65,8 @@ ratioFitFromDf(df, transients = 1, type = "mono", ig = NULL,
   \item{"Subset"}{the indices of the \code{Time} vector used for the fit}
 }
 \author{Sebastien Joucla \email{sebastien.joucla@parisdescartes.fr}}
-\seealso{\code{\link{transientConvexPart}}, 
-  \code{\link{caFromDf}}, 
+\seealso{\code{\link{transientConvexPart}},
+  \code{\link{caFromDf}},
   \code{\link{igRatio}},
   \code{\link{ratioFitFromCa}}
 }
@@ -89,10 +75,10 @@ ratioFitFromDf(df, transients = 1, type = "mono", ig = NULL,
 data(inVitro)
 
 ## Calibrated parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = TRUE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = TRUE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = TRUE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = TRUE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=TRUE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=TRUE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=TRUE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=TRUE)
 
 ## Create the data frame containing the physiological data
 ## (experiment #2, stimulation #2)

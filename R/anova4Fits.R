@@ -1,4 +1,4 @@
-`anova4Fits` <-
+anova4Fits <-
 function(Fit_1, Fit_2) {
   ## Perform an ANalyse Of VAriance to determine the best fit among 2
   ## Useful to check whether a monoexponential or biexponential fit,

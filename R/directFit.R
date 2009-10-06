@@ -1,5 +1,4 @@
-`directFit` <-
-function(df,
+directFit <- function(df,
                       transients=c(1,2,3),
                       SQRT=TRUE,
                       ratio=NULL,
@@ -121,7 +120,7 @@ function(df,
   }
 
   alpha_backup <- alpha
-    
+  
   ## ---------------------------------------------------------
   ## Get an initial guess for the calcium transient parameters
   
@@ -150,19 +149,28 @@ function(df,
   }
   
   ## 2) Define the appropriate list of initial guesses
+  ## names of the parameters
+  if(type == "mono") {
+    param_names <- c("log_Ca0","log_dCa","log_tau")
+  } else if(type =="bi") {
+    param_names <- c("log_Ca0","log_dCa","log_tau","mu","log_dtau")
+  }
+  
   if(inherits(ratio,"initial_guess")) { ## | inherits(ratio,"list")) {
     ig_ratio <- ratio
   } else if(inherits(ratio,"ratio_fit")) {
-    ig_ratio <- as.list(coef(ratio))
+    ig_ratio <- as.list(ratio$par)
     for(j in 1:length(ig_ratio)) {
-      names(ig_ratio)[j] <- sprintf("%s_%d",names(ig_ratio)[j],transients)
+      ## names(ig_ratio)[j] <- sprintf("%s_%d",names(ig_ratio)[j],transients)
+      names(ig_ratio)[j] <- sprintf("%s_%d",param_names[j],transients)
     }
   } else if(inherits(ratio,"ratio_fit_list")) {
     ig_ratio <- c()
     for(k in transients) {
-      ig_ratio_k <- as.list(coef(ratio[[k]]))
+      ig_ratio_k <- as.list(ratio[[k]]$par)
       for(j in 1:length(ig_ratio_k)) {
-        names(ig_ratio_k)[j] <- sprintf("%s_%d",names(ig_ratio_k)[j],k)
+        ## names(ig_ratio_k)[j] <- sprintf("%s_%d",names(ig_ratio_k)[j],k)
+        names(ig_ratio_k)[j] <- sprintf("%s_%d",param_names[j],k)
       }
       ig_ratio <- c(ig_ratio, ig_ratio_k)
     }
@@ -172,24 +180,24 @@ function(df,
                                     type=type,
                                     Plot=Plot,
                                     Fit=Fit,
-                                    AfterPeak=AfterPeak,
-                                    Trace=Trace,
-                                    WarnOnly=WarnOnly
+                                    AfterPeak=AfterPeak
                                     )
-
+    
     if(inherits(ig_ratio_list,"ratio_fit_list")) {
       ig_ratio <- c()
       for(k in transients) {
-        ig_ratio_k <- as.list(coef(ig_ratio_list[[k]]))
+        ig_ratio_k <- as.list(ig_ratio_list[[k]]$par)
         for(j in 1:length(ig_ratio_k)) {
-          names(ig_ratio_k)[j] <- sprintf("%s_%d",names(ig_ratio_k)[j],k)
+          ## names(ig_ratio_k)[j] <- sprintf("%s_%d",names(ig_ratio_k)[j],k)
+          names(ig_ratio_k)[j] <- sprintf("%s_%d",param_names[j],k)
         }
         ig_ratio <- c(ig_ratio, ig_ratio_k)
       }
     } else if(inherits(ig_ratio_list,"ratio_fit")) {
-      ig_ratio <- as.list(coef(ig_ratio_list))
+      ig_ratio <- as.list(ig_ratio_list$par)
       for(j in 1:length(ig_ratio)) {
-        names(ig_ratio)[j] <- sprintf("%s_%d",names(ig_ratio)[j],transients)
+        ## names(ig_ratio)[j] <- sprintf("%s_%d",names(ig_ratio)[j],transients)
+        names(ig_ratio)[j] <- sprintf("%s_%d",param_names[j],transients)
       }
     }
   }
@@ -435,4 +443,3 @@ function(df,
   
   return(result)
 }
-

@@ -1,4 +1,4 @@
-`ratioExpPhysio` <-
+ratioExpPhysio <-
 function(dataset="inVitro",
                            expe=1,
                            stim=1,
@@ -98,14 +98,14 @@ function(dataset="inVitro",
         data$adu360Background/(data$exposureTime360*data$P360Background)
       
       ## We assume a Poissonian noise -> use sqrt
-      data_360_ss <- smooth.spline(data$time360,sqrt(data_360))
+      data_360_ss <- smooth.spline(data$time360,data_360)
       
       ## Interpolate the fluorescence at 360 nm at times corresponding to the
       ## baselines and the last points of the transients recorded at 340 and 380 nm
       time1 <- t[1,c(1:(idxOn-1),dim(t)[2])]
       time2 <- t[2,c(1:(idxOn-1),dim(t)[2])]
       time3 <- t[3,c(1:(idxOn-1),dim(t)[2])]
-      data_360_t <- (predict(data_360_ss,c(time1, time2, time3))$y)^2
+      data_360_t <- (predict(data_360_ss,c(time1, time2, time3))$y)
       
       ## Define the signal to fit (340 nm)
       data_340_1 <- adu340[1,c(1:(idxOn-1),dim(t)[2])]/(T_340*P) - adu340_B/(T_340*P_B)
@@ -123,18 +123,14 @@ function(dataset="inVitro",
       alphamethod_fit <- nls(data_340_t ~ -alpha*data_380_t+beta*data_360_t,
                              start=list(alpha=0,beta=1))
       alpha <- summary(alphamethod_fit)$parameters[1,1]
-      ## alpha <- list(value = alpha,
-      ## mean = alpha,
-      ## se = summary(alphamethod_fit)$parameters[1,2],
-      ## USE_se = TRUE)
       beta <- summary(alphamethod_fit)$parameters[2,1]
-
+      
       alpha_init <- alpha
-
+      
       ## -----------------------------------------------------------------
       ## MONTE-CARLO to get a reliable estimation of ^alpha and sd(^alpha)
       ## -----------------------------------------------------------------
-
+      
       ## Smooth the data      
       data_340_1[-length(data_340_1)] <- mean(data_340_1[-length(data_340_1)])
       data_340_2[-length(data_340_2)] <- mean(data_340_2[-length(data_340_2)])
@@ -147,22 +143,22 @@ function(dataset="inVitro",
       data_380_t <- c(data_380_1, data_380_2, data_380_3)
 
       data_360_t <- (data_340_t+alpha*data_380_t)/beta
-
+      
       ## - Draw new data from Poisson distribution (take care of G !)
       ## - Fit these new data
       ## - Take the mean and sd of the vector of alpha values obtained from the fit
       MCtrials <- 1000
       
       alpha_vec <- vector("numeric",MCtrials)
-
+      
       for(k in 1:MCtrials) {
         data_340_t_pois <- G*rpois(length(data_340_t),data_340_t/G)
         data_380_t_pois <- G*rpois(length(data_380_t),data_380_t/G)
         data_360_t_pois <- G*rpois(length(data_360_t),data_360_t/G)
-
+        
         alphamethod_fit <- nls(data_340_t_pois ~ -alpha*data_380_t_pois+beta*data_360_t_pois,
-                               start=list(alpha=0,beta=1))
-
+                               start=list(alpha=alpha,beta=beta))
+        
         alpha_vec[k] <- summary(alphamethod_fit)$parameters[1,1]
       }
       

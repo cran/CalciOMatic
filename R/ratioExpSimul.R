@@ -1,4 +1,4 @@
-`ratioExpSimul` <-
+ratioExpSimul <-
 function(nb_B=5,
                           Ca,
                           R_min=0.136,
@@ -15,7 +15,8 @@ function(nb_B=5,
                           P_B=400,
                           ntransients=1,
                           G=1,
-                          s_ro=0
+                          s_ro=0,
+                          noise=TRUE
                           ) {
   ## Function ratioExpSimul
   ## Simulates one or more ratiometric experiment(s) with a given [Ca] transient
@@ -45,6 +46,10 @@ function(nb_B=5,
   ## P: number of pixels used for the fluorescence data binning
   ## P_B: number of pixels used for the background data binning
   ## ntransients: the number of transients to simulate
+  ## G: the gain of the CCD camera
+  ## s_ro: the standard deviation of the read-out noise
+  ## noise: a logical. Set to TRUE to draw fluorescence values from Poisson distributions
+  ##                   Set to FALSE to let the fluorescence values as is (round them only)
   ##
   ## A data frame of class "fluo_rawdata" is returned with the following variables:
   ##  - adu: the counts read out of the "camera"
@@ -91,7 +96,11 @@ function(nb_B=5,
                           )
   
   ## Add a poissonian noise and multiply the adu by the gain factor G
-  adu <- G*rpois(length(adu),adu)
+  if(noise == TRUE) {
+    adu <- G*rpois(length(adu),adu)
+  } else {
+    adu <- round(adu)
+  }
   
   ## Define the different fields of the data frame
   t <- attr(Ca,"Time")

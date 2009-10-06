@@ -23,31 +23,34 @@
 }
 \arguments{
   \item{x}{a data frame of class \code{direct_fit}, as
-    returned by the \code{Direct_Fit_fct} function}
+    returned by the \code{directFit} function}
   \item{y}{argument not used (NULL by default)}
-  \item{numTransient}{a vector of integers specigying which of the
-    fitted transients whould be plotted}
+  \item{numTransient}{a vector of integers specifying which of the
+    fitted transients should be plotted}
   \item{items}{a vector of integers (between 1 and 7), telling which
-    plots to draw}
-  \item{col}{the color of the main signals to plot (either an integer or a
-    character string)}
-  \item{col2}{the color of the secondary signals to plot (either an integer or a
-    character string)}
-  \item{main}{a character string, the main title of the figure}
-  \item{xlabs}{a vector of character strings to add to the x-axes}
-  \item{ylabs}{a vector of character strings to add to the y-axes}
-  \item{labs}{a vector of character strings to add to the top left of
-    each panel}
+    panels to draw}
+  \item{col}{the color of the main signal to plot (either an integer or
+    a character string)}
+  \item{col2}{the color of the secondary signal to plot (either an
+    integer or a character string)}
+  \item{main}{a character string specifying the main title of the
+    figure}
+  \item{xlabs}{a vector of character strings specifying the label of the
+    x-axes}
+  \item{ylabs}{a vector of character strings specifying the label of the
+    x-axes}
+  \item{labs}{a vector of character strings specifying the label at the
+    top-left of each panel (generally a letter, a letter with an integer, or an
+    expression)}
   \item{ylas}{an integer specifying the orientation of the
     yticks. Possible values are 0 or 3 (vertical), or 1 or 2
     (horizontal)}
-  \item{ask}{a logical value (\code{FALSE} by default). If set to
-    \code{TRUE}, three or four symbols (among the followings: left
-    arrow, red circle, black square and right arrow) are added at the
-    bottom right of the plot, on which the user is allowed to click to
-    perform any action. In that case, a character string is returned,
-    telling what the user asked for. This option is useful when
-    \code{plot.calciomatic} is called by a high-level plot method}
+  \item{ask}{a logical value. Set to \code{FALSE} to draw all plots on
+    the same figure. If set to \code{TRUE}, a single device will be
+    opened, in which the first plot will be drawn. Three symbols (left
+    arrow, black square and right arrow) will be added at the bottom
+    right of the plot, for interactions with the user (see details
+    below)}
   \item{\dots}{one or more of the following plot parameters:
     \code{"cex"}, \code{"cex.axis"}, \code{"cex.lab"},
     \code{"cex.main"}, \code{"font"}, \code{"font.axis"},
@@ -72,7 +75,7 @@
 \author{Sebastien Joucla \email{sebastien.joucla@parisdescartes.fr}}
 \seealso{\code{\link{plotCalciOMatic}},
   \code{\link{plot.fluo_rawdata}},
-  \code{\link{plot.direct_fit}},
+  \code{\link{plot.ratio_fit}},
   \code{\link{plot.ratio_fit_list}}
 }
 \examples{
@@ -80,10 +83,10 @@
 data(inVitro)
 
 ## Calibrated parameters
-R_min <- list(value=0.136, mean=0.136, se= 0.00363, USE_se = TRUE)
-R_max <- list(value=2.701, mean=2.701, se= 0.151,   USE_se = TRUE)
-K_eff <- list(value=3.637, mean=3.637, se= 0.729,   USE_se = TRUE)
-K_d   <- list(value=0.583, mean=0.583, se= 0.123,   USE_se = TRUE)
+R_min <- list(value=0.136, mean=0.136, se=0.00363, USE_se=TRUE)
+R_max <- list(value=2.701, mean=2.701, se=0.151,   USE_se=TRUE)
+K_eff <- list(value=3.637, mean=3.637, se=0.729,   USE_se=TRUE)
+K_d   <- list(value=0.583, mean=0.583, se=0.123,   USE_se=TRUE)
 
 ## Create the data frame containing the physiological data
 ## (experiment #2, stimulation #2)
@@ -106,14 +109,9 @@ physioDirectFit <- directFit(physioData,
 
 ## Plot the raw and fitted data as well as goodness of fit tests
 ## on the same figure
-plot(x=physioDirectFit,
-     numTransient=2,
-     items=1:6)
+plot(x=physioDirectFit, numTransient=2, items=1:6)
 
 ## Plot the raw and fitted data as well as goodness of fit tests
 ## on the same figure
-## plot(x=physioDirectFit,
-##      numTransient=2,
-##      items=1:6,
-##      ask=TRUE)
+## plot(x=physioDirectFit, numTransient=2, items=1:6, ask=TRUE)
 }

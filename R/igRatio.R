@@ -1,4 +1,4 @@
-`igRatio` <-
+igRatio <-
 function(Ca,
                     t,
                     tOn=1,

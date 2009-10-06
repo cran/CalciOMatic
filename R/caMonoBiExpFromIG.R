@@ -1,4 +1,4 @@
-`caMonoBiExpFromIG` <-
+caMonoBiExpFromIG <-
 function(t=1,
                               tOn=1,
                               ig=NULL

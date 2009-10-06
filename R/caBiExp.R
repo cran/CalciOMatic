@@ -1,4 +1,4 @@
-`caBiExp` <-
+caBiExp <-
 function(t=1,
                     tOn=1,
                     Ca0=0.05,
@@ -20,12 +20,7 @@ function(t=1,
   ## dtau: delta time constant (in s) of the biexponential return to baseline
   
   ## Create the biexponential calcium transient
-  result <- Ca0 + dCa * sapply(t,
-                               function(T)
-                               ifelse(T>=tOn,
-                                      fact*exp(-(T-tOn)/tau) + (1-fact)*exp(-(T-tOn)/(tau+dtau)),
-                                      0)
-                               )
+  result <- Ca0 + dCa * ifelse(t>=tOn, fact*exp(-(t-tOn)/tau) + (1-fact)*exp(-(t-tOn)/(tau+dtau)), 0)
 
   attr(result,"Time") <- t
   attr(result,"tOn") <- tOn
